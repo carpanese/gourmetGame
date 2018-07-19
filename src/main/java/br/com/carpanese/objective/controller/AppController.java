@@ -21,7 +21,7 @@ public class AppController {
 	}
 	
 	private void init(Node node) {
-		MessageView.showMessageInformacao(Constants.Title.TITULO_PRINCIPAL, Constants.Question.PERGUNTA_INICIAL);
+		MessageView.showInformationMessage(Constants.Title.TITULO_PRINCIPAL, Constants.Question.PERGUNTA_INICIAL);
 		processNode(node);
 	}
 	
@@ -30,11 +30,11 @@ public class AppController {
 	 * @param node no raiz ou recursivo
 	 */
 	private void processNode(Node node) {
-		boolean confirm = ConfirmView.confirmaOpcao(Constants.Title.TITULO_CONFIRMACAO, node);
+		boolean confirm = ConfirmView.confirmNode(Constants.Title.TITULO_CONFIRMACAO, node);
 		if (confirm && null != node.getLeft()) {
 			processNode(node.getLeft());
 		} else if (confirm) {
-			MessageView.showMessageInformacao(Constants.Title.TITULO_ACERTEI, Constants.DESCRICAO_ACERTEI);
+			MessageView.showInformationMessage(Constants.Title.TITULO_ACERTEI, Constants.DESCRICAO_ACERTEI);
 			createDefaultNode();
 			init(rootNode);
 		} else {
@@ -51,8 +51,8 @@ public class AppController {
 	 * @param node ultimo no para a pergunta de negacao
 	 */
 	private void userNodeProcess(Node node) {
-		Node nodeChild = new Node(InputView.inputPrato());
-		Node nodeParent = new Node(InputView.inputPratoNegacao(nodeChild.getDescription(), node.getDescription()));
+		Node nodeChild = new Node(InputView.inputNode());
+		Node nodeParent = new Node(InputView.inputNodeParent(nodeChild.getDescription(), node.getDescription()));
 		nodeParent.add(nodeParent, nodeChild, true);
 		processTreeAddNode(rootNode, nodeParent);
 		init(rootNode);

@@ -14,7 +14,7 @@ public class MessageView {
 	 * @param titulo titulo da mensagem
 	 * @param mensagem mensagem
 	 */
-	public static void showMessageInformacao(String titulo, String mensagem) {
+	public static void showInformationMessage(String titulo, String mensagem) {
         JOptionPane.showMessageDialog(
                 null,
                 mensagem, 

@@ -20,7 +20,7 @@ public class ConfirmView {
 	 * @param node no
 	 * @return true ou false de acordo com o escolhido
 	 */
-	public static Boolean confirmaOpcao(String titulo, Node node) {
+	public static Boolean confirmNode(String titulo, Node node) {
 		return JOptionPane.showConfirmDialog(null, 
 				MessageFormat.format(Constants.Question.PERGUNTA_ESCOLHA_INI, node.getDescription()), 
 				titulo,
