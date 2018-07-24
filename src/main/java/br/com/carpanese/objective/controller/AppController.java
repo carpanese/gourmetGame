@@ -1,5 +1,7 @@
 package br.com.carpanese.objective.controller;
 
+import javax.swing.JOptionPane;
+
 import br.com.carpanese.objective.model.Node;
 import br.com.carpanese.objective.utils.Constants;
 import br.com.carpanese.objective.view.ConfirmView;
@@ -14,6 +16,8 @@ import br.com.carpanese.objective.view.MessageView;
 public class AppController {
 	
 	Node rootNode;
+	Node parentNode;
+	boolean isLeft;
 	
 	public AppController() {
 		createDefaultNode();
@@ -30,19 +34,28 @@ public class AppController {
 	 * @param node no raiz ou recursivo
 	 */
 	private void processNode(Node node) {
-		boolean confirm = ConfirmView.confirmNode(Constants.Title.TITULO_CONFIRMACAO, node);
-		if (confirm && null != node.getLeft()) {
-			processNode(node.getLeft());
-		} else if (confirm) {
-			MessageView.showInformationMessage(Constants.Title.TITULO_ACERTEI, Constants.DESCRICAO_ACERTEI);
-			createDefaultNode();
-			init(rootNode);
-		} else {
-			if (null != node.getRight()) {
-				processNode(node.getRight());
-			} else {
-				userNodeProcess(node);
+		Integer confirm = ConfirmView.confirmNode(Constants.Title.TITULO_CONFIRMACAO, node);
+		switch (confirm) {
+		case JOptionPane.YES_OPTION:
+			if(null == node.getLeft()) {
+				MessageView.showInformationMessage(Constants.Title.TITULO_ACERTEI, Constants.DESCRICAO_ACERTEI);
+				init(rootNode);
+				break;
 			}
+			parentNode = node;
+			isLeft = true;
+			processNode(node.getLeft());
+			break;
+
+		case JOptionPane.NO_OPTION:
+			if(null != node.getRight()) {
+				isLeft = false;
+				parentNode = node;
+				processNode(node.getRight());
+				break;
+			}
+			userNodeProcess(node);
+			break;
 		}
 	}
 	
@@ -54,28 +67,20 @@ public class AppController {
 		Node nodeChild = new Node(InputView.inputNode());
 		Node nodeParent = new Node(InputView.inputNodeParent(nodeChild.getDescription(), node.getDescription()));
 		nodeParent.add(nodeParent, nodeChild, true);
-		processTreeAddNode(rootNode, nodeParent);
-		init(rootNode);
-	}
-	
-	/**
-	 * Percorre a arvore para adicionar antes do ultimo no (Bolo)
-	 * @param root root recursivo
-	 * @param newNode No criado pelo usuario
-	 */
-	private void processTreeAddNode(Node root, Node newNode) {
-		if(null == root.getRight().getRight()) {
-			newNode.add(newNode, root.getRight(), false);
-			root.add(root, newNode, false);
+		nodeParent.add(nodeParent, node, false);
+		if(isLeft) {
+			parentNode.add(parentNode, nodeParent, true);
 		} else {
-			processTreeAddNode(root.getRight(), newNode);
+			parentNode.add(parentNode, nodeParent, false);
 		}
+		init(rootNode);
 	}
 	
 	/**
 	 * Cria o padrao para inicio da aplicacao
 	 */
 	private void createDefaultNode() {
+		parentNode = new Node();
 		rootNode = new Node(Constants.PRATO_PADRAO);
 		rootNode.add(rootNode, new Node(Constants.PRATO_FILHO_PADRAO), true);
 		rootNode.add(rootNode, new Node(Constants.PRATO_PADRAO_BOLO), false);

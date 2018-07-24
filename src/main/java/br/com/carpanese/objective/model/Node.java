@@ -17,6 +17,10 @@ public class Node {
         left = null;
     }
     
+    public Node () {
+    	//DEFAULT CONSTRUCTOR
+    }
+    
     /**
      * Adiciona um novo no na arvore
      * @param parent pai onde sera adicionado o novo no
