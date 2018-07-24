@@ -68,11 +68,7 @@ public class AppController {
 		Node nodeParent = new Node(InputView.inputNodeParent(nodeChild.getDescription(), node.getDescription()));
 		nodeParent.add(nodeParent, nodeChild, true);
 		nodeParent.add(nodeParent, node, false);
-		if(isLeft) {
-			parentNode.add(parentNode, nodeParent, true);
-		} else {
-			parentNode.add(parentNode, nodeParent, false);
-		}
+		parentNode.add(parentNode, nodeParent, isLeft);
 		init(rootNode);
 	}
 	
